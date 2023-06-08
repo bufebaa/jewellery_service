@@ -1,0 +1,15 @@
+<li><a {% if request.path == '/' %} class="active" {% endif %} href="{% url 'index' %}">Home</a></li>
+<li><a href="{% url 'category_detail' 'all' %}">Shop</a>
+    <ul class="sub-menu">
+        <li><a href="{% url 'category_detail' 'all' %}">Show all</a></li>
+        {% for category in categories %}
+            <li><a href="{% url 'category_detail' category.slug %}">{{ category.name }}</a></li>
+        {% endfor %}
+    </ul>
+</li>
+<li><a href="{% url 'about' %}">About</a></li>
+{% if request.user.is_authenticated %}
+    {% if request.user.userprofile.is_vendor %}
+        <li><a href="{% url 'my_store' %}">My store</a></li>
+    {% endif %}
+{% endif %}
