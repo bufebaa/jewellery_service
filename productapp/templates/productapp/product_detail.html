@@ -1,0 +1,86 @@
+{% extends 'mainapp/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<!-- Product Page Section Beign -->
+<section class="product-page">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="product-img">
+                    <figure>
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        {% endif %}
+                    </figure>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="product-content">
+                    <h2>{{ product.name }}</h2>
+                    <div class="pc-meta">
+                        <h5>${{ product.price }}</h5>
+                        <div class="rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                    </div>
+                    {% if product.description %}
+                        <p>{{ product.description }}</p>
+                    {% endif %}
+                    <ul class="tags">
+                        <li><span>Category :</span> {{ product.category }}</li>
+                        <li><span>Vendor :</span>
+                            <a href="{% url 'vendor_detail' product.user.id %}" style="color: deepskyblue;">
+                                {% firstof product.user.get_full_name product.user.username %}
+                            </a>
+                        </li>
+                    </ul>
+                    <a href="{% url 'add_to_cart' product.id %}" class="primary-btn pc-btn">Add to cart</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Product Page Section End -->
+
+<!-- Related Product Section Begin -->
+<section class="related-product spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="section-title">
+                    <h2>Related Products</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row align-items-end">
+            {% for related_product in related_products %}
+                <div class="col-lg-3 col-sm-6">
+                    <div class="single-product-item">
+                        <figure>
+                            <a href="{% url 'product_detail' related_product.category.slug related_product.slug %}">
+                                {% if related_product.image %}
+                                    {% load thumbnail %}
+                                    {% thumbnail related_product.image "500" as im %}
+                                        <img src="{{ im.url }}" alt="{{ related_product.name }}">
+                                    {% endthumbnail %}
+                                {% endif %}
+                            </a>
+                        </figure>
+                        <div class="product-text">
+                            <h6>{{ related_product.name }}</h6>
+                            <p>${{ related_product.price }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<!-- Related Product Section End -->
+{% endblock %}
